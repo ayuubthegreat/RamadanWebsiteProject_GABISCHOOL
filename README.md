@@ -9,7 +9,9 @@ git commit -m ||
 
 git branch -M main ||
 
-git remote add origin || 
+git remote add origin https://github.com/ayuubthegreat/RamadanWebsiteProject_GABISCHOOL || 
 
 git push -u origin main ||
+
+# NOTE: You must create a file in order for the last command to successfully work. 
 
