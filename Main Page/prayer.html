@@ -4,17 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Prayer Times</title>
+  <link rel="stylesheet" href="homeStyle.css">
   <style>
     /* Reset */
-    * {
-      box-sizing: border-box;  
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    
 
     body {
-      font-family: 'Segoe UI', sans-serif;
       background:
         linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)),
         url('https://www.toptal.com/designers/subtlepatterns/uploads/arabesque.png');
@@ -77,7 +72,7 @@
       text-align: center;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       transition: transform 0.2s ease;
-      color: #fff;
+      color: gray
     }
 
     .card:hover {
@@ -132,21 +127,44 @@
       background-color: #074b84;
     }
   </style>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
+  <nav class="startNav">
+        <!-- Logo and Title -->
+        <div class="logo-title">
+            <img src="A9D234AC-C3C0-40FB-A10E-A59F727501CE.PNG" alt="Gabi School Logo" width="200px" />
+            <h1>Ramadan Hub</h1>
+           
+        </div>
+        <!-- Navigation links -->
+        <div class="nav-links">
+            <a href="homePage.html">Home</a>
+            <a href="prayer.html">Prayer</a>
+            <a href="quranPage.html">Quran</a>
+            <a href="">Mosques</a>
+            <a href="">Community</a>
+        </div>
+        <!-- Dark Mode Toggle -->
+        <div class="darkandSign">
+            <a href="#"><img src="A9D234AC-C3C0-40FB-A10E-A59F727501CE.PNG" alt="Dark Mode Icon" width="20" /></a>
+            <button><a href="signIn.html">Sign In</a></button>
+        
+        </div>
+  </nav>
   <header>
     <h1>🕌 Daily Prayer Times</h1>
-    <p id="location">Detecting location...</p>
+    <p class="prayerlocation">Detecting location...</p>
     <button id="themeToggle">🌙 Light Mode</button>
   </header>
 
   <main>
     <section class="prayer-times">
-      <div class="card"><h2>Fajr</h2><p id="fajr">--:--</p></div>
-      <div class="card"><h2>Dhuhr</h2><p id="dhuhr">--:--</p></div>
-      <div class="card"><h2>Asr</h2><p id="asr">--:--</p></div>
-      <div class="card"><h2>Maghrib</h2><p id="maghrib">--:--</p></div>
-      <div class="card"><h2>Isha</h2><p id="isha">--:--</p></div>
+      <div class="card"><h2>Fajr</h2><p class="fajr-prayer-time">--:--</p></div>
+      <div class="card"><h2>Dhuhr</h2><p class="dhuhr-prayer-time">--:--</p></div>
+      <div class="card"><h2>Asr</h2><p class="asr-prayer-time">--:--</p></div>
+      <div class="card"><h2>Maghrib</h2><p class="maghrib-prayer-time">--:--</p></div>
+      <div class="card"><h2>Isha</h2><p class="isha-prayer-time">--:--</p></div>
     </section>
   </main>
 
@@ -154,7 +172,7 @@
     <p>&copy; 2025 Prayer Times | Designed by Salmo</p>
   </footer>
 
-  <!-- Scripts -->
+ 
   <script>
     // Theme Toggle
     const themeToggle = document.getElementById('themeToggle');
@@ -173,41 +191,32 @@
       themeToggle.textContent = isLight ? '🌚 Dark Mode' : '🌙 Light Mode';
       localStorage.setItem('theme', isLight ? 'light' : 'dark');
     });
-
-    // Aladhan API - Get Location and Fetch Times
-    document.addEventListener("DOMContentLoaded", () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(success, error);
-      } else {
-        document.getElementById("location").textContent = "Geolocation not supported.";
-      }
-
-      function success(position) {
-        const { latitude, longitude } = position.coords;
-        const apiUrl = `https://api.aladhan.com/v1/timings?latitude=${latitude}&longitude=${longitude}&method=2`;
-
-        fetch(apiUrl)
-          .then(response => response.json())
-          .then(data => {
-            const timings = data.data.timings;
-            const timezone = data.data.meta.timezone;
-
-            document.getElementById("location").textContent = `Location: ${timezone}`;
-            document.getElementById("fajr").textContent = timings.Fajr;
-            document.getElementById("dhuhr").textContent = timings.Dhuhr;
-            document.getElementById("asr").textContent = timings.Asr;
-            document.getElementById("maghrib").textContent = timings.Maghrib;
-            document.getElementById("isha").textContent = timings.Isha;
-          })
-          .catch(() => {
-            document.getElementById("location").textContent = "Failed to load prayer times.";
-          });
-      }
-
-      function error() {
-        document.getElementById("location").textContent = "Unable to get your location.";
-      }
-    });
   </script>
+  <nav class="endNav">
+        <!-- Logo and Title -->
+        <div class="end-logo">
+            <img src="A9D234AC-C3C0-40FB-A10E-A59F727501CE.PNG" alt="Gabi School Logo" width="200px" />
+            <h1>Ramadan Hub</h1>
+           
+        </div>
+        <!-- Navigation links -->
+        <div class="nav-links-end">
+            <a href="homePage.html">Home</a>
+            <a href="prayer.html">Prayer</a>
+            <a href="quranPage.html">Quran</a>
+            <a href="">Mosques</a>
+            <a href="">Community</a>
+        </div>
+        <!-- Dark Mode Toggle -->
+        <div class="darkandSign">
+            <a href="#"><img src="A9D234AC-C3C0-40FB-A10E-A59F727501CE.PNG" alt="Dark Mode Icon" width="20" /></a>
+            <button><a href="signIn.html">Sign In</a></button>
+        
+        </div>
+        
+
+    </nav>
+  
 </body>
+<script src="homeScript.js"></script>
 </html>
