@@ -63,3 +63,68 @@ const getQuranVerse = function() {
 }
 
 getQuranVerse();
+// GitHub Image Integration
+const cardContainer = document.querySelector(".cards");
+const cardTemplate = document.querySelector(".team-member-card");
+const teamMembers = [
+    {
+        name: "Ayuub Yusuf",
+        username: "ayuubthegreat",
+        role: "Team Leader",
+        image: "team_member_1.jpg"
+    },
+    {
+        name: "Umm Anzal",
+        username: "ummanzal",
+        role: "Developer",
+        image: "team_member_2.jpg"
+    },
+    {
+        name: "Mohamed",
+        username: "mohamed",
+        role: "Developer",
+        image: "team_member_3.jpg"
+    },
+    {
+        name: "Hamza",
+        username: "hamza",
+        role: "Developer",
+        image: "team_member_4.jpg"
+    }
+];
+const createTeamCards = function(name, role, username) {
+    const newCard = document.createElement("div");
+    newCard.classList.add("teamMemberCard");
+    const newImage = document.createElement("div");
+    newImage.classList.add("teamMemberImage");
+    const avatarImage = document.createElement("img");
+    avatarImage.src = fetchGitHubImage(username);
+    avatarImage.alt = `${name}'s avatar`;
+    avatarImage.width = 200;
+    newImage.appendChild(avatarImage);
+    newCard.appendChild(newImage);
+    const newInfo = document.createElement("div");
+    newInfo.classList.add("teamMemberInfo");
+    newInfo.innerHTML = `<h3>${name}</h3><p>${role}</p>`;
+    newCard.appendChild(newInfo);
+    cardContainer.appendChild(newCard);
+}
+const fetchGitHubImage = function(username) {
+    axios.get(`https://api.github.com/users/${username}`)
+    .then(response => {
+        const user = response.data;
+        const avatar = response.data.avatar_url;
+        console.log(avatar);
+        console.log("Fetched GitHub user:", user);
+        // You can now use the user data to display images or other information
+        return avatar;
+    })
+    .catch(error => {
+        console.error("Error fetching GitHub user:", error);
+    });
+}
+console.log(fetchGitHubImage("ayuubthegreat"));
+teamMembers.forEach(member => {
+    console.log(member.username);
+    createTeamCards(member.name, member.role, member.username);
+});
