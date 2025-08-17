@@ -7,6 +7,7 @@ const dhuhrTime = document.querySelector(".dhuhr-prayer-time");
 const asrTime = document.querySelector(".asr-prayer-time");
 const maghribTime = document.querySelector(".maghrib-prayer-time");
 const ishaTime = document.querySelector(".isha-prayer-time");
+const timerForPrayerIntervals = document.querySelector(".next-prayer-time");
 const prayerTimesElements = [fajrTime, dhuhrTime, asrTime, maghribTime, ishaTime];
 const prayerTimes = [
     {fajr: "00:00"},
@@ -22,11 +23,23 @@ const updatePrayerTimes = function(city = "Minneapolis", state = "Minnesota", ..
 
     });
 }
+const darkModeBTN = document.querySelectorAll(".dark-mode-toggle");
+darkModeBTN.forEach((btn) => {
 
-console.log(prayerTimes);
-const getPrayerTimes = function(city = "Minneapolis", state = "Minnesota", country = "GB") {
+    btn.addEventListener("click", () => {
+        console.log("Dark mode toggled");
+        document.querySelectorAll(".startNav, .endNav, .mainSection, body, .featureSection, .navLinks, .nav-link, .welcomeText, .masjidImg").forEach(nav => {
+            nav.classList.toggle("dark-mode");
+        });
+    });
+});
 
-    axios.get(`https://api.aladhan.com/v1/timingsByCity/01-01-2025?city=${city}&country=${country}&state=${state}&method=3&shafaq=general&tune=5%2C3%2C5%2C7%2C9%2C-1%2C0%2C8%2C-6&timezonestring=UTC&calendarMethod=UAQ`)
+const getPrayerTimes = function(city = "Minneapolis", state = "Minnesota", country = "US") {
+
+    const currentDate = new Date().toISOString().split("T")[0];
+    const [year, month, day] = currentDate.split("-");
+    console.log(currentDate);
+    axios.get(`https://api.aladhan.com/v1/timingsByCity/${day}-${month}-${year}?city=${city}&country=${country}&state=${state}&method=3&shafaq=general&tune=5%2C3%2C5%2C7%2C9%2C-1%2C0%2C8%2C-6&timezonestring=UTC&calendarMethod=UAQ`)
     .then(response => {
         console.log("Prayer times fetched successfully:", response.data);
         const timings = response.data.data.timings;
@@ -46,16 +59,18 @@ getPrayerTimes("Minneapolis", "Minnesota", "GB");
 //Quran API Integration
 const surahName = document.querySelector(".surahName");
 const verse = document.querySelector(".verse-text");
+const verseNumber = document.querySelector(".verse-number");
 let ayahNumber = 1;
 
 const getQuranVerse = function() {
-    ayahNumber = Math.floor(Math.random() * 600) + 1;
-    console.log(ayahNumber); // Random ayah number between 1 and 600
+    ayahNumber = Math.floor(Math.random() * 6236) + 1;
+    console.log(ayahNumber); // Random ayah number between 1 and 6236
     axios.get(`https://api.alquran.cloud/v1/ayah/${ayahNumber}`)
     .then(response => {
         console.log("Quran verse fetched successfully:", response.data);
         verse.textContent = response.data.data.text;
         surahName.textContent = `From Surah ${response.data.data.surah.englishName}`;
+        verseNumber.textContent = `${response.data.data.surah.number}:${response.data.data.numberInSurah}`;
     })
     .catch(error => {
         console.error("Error fetching Quran verse:", error);
@@ -98,9 +113,16 @@ const createTeamCards = function(name, role, username) {
     const newImage = document.createElement("div");
     newImage.classList.add("teamMemberImage");
     const avatarImage = document.createElement("img");
-    avatarImage.src = fetchGitHubImage(username);
     avatarImage.alt = `${name}'s avatar`;
-    avatarImage.width = 200;
+    avatarImage.width = 100;
+    // Set a placeholder image initially
+    avatarImage.src = "https://avatars.githubusercontent.com/u/583231?v=4"; // GitHub's default Octocat
+    // Fetch the actual GitHub avatar asynchronously
+    fetchGitHubImage(username).then(avatarUrl => {
+        if (avatarUrl) {
+            avatarImage.src = avatarUrl;
+        }
+    });
     newImage.appendChild(avatarImage);
     newCard.appendChild(newImage);
     const newInfo = document.createElement("div");
@@ -110,21 +132,26 @@ const createTeamCards = function(name, role, username) {
     cardContainer.appendChild(newCard);
 }
 const fetchGitHubImage = function(username) {
-    axios.get(`https://api.github.com/users/${username}`)
+    return axios.get(`https://api.github.com/users/${username}`)
     .then(response => {
         const user = response.data;
         const avatar = response.data.avatar_url;
         console.log(avatar);
         console.log("Fetched GitHub user:", user);
-        // You can now use the user data to display images or other information
-        return avatar;
+        return response.data.avatar_url;
     })
     .catch(error => {
         console.error("Error fetching GitHub user:", error);
+        return null;
     });
 }
-console.log(fetchGitHubImage("ayuubthegreat"));
+// Remove the following line as it will log a Promise, not the avatar URL
+// console.log(fetchGitHubImage("ayuubthegreat"));
 teamMembers.forEach(member => {
     console.log(member.username);
     createTeamCards(member.name, member.role, member.username);
 });
+
+// Dark Mode (Website-Wide)
+
+
